@@ -13,18 +13,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HelloApiTest {
     @Test
-    void helloApi(){
-        // http localhost:8080/hello?name=Spring
-        TestRestTemplate restTemplate = new TestRestTemplate();
-        ResponseEntity<String> res = restTemplate.getForEntity(
-                "http://localhost:8080/hello?name={name}", String.class, "Spring");
+    void helloApi() {
+        TestRestTemplate rest = new TestRestTemplate();
 
-        // status code 200
+        ResponseEntity<String> res =
+                rest.getForEntity("http://localhost:8080/hello?name={name}", String.class, "Spring");
+
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        // header(content-type) text/plain
         assertThat(res.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE)).startsWith(MediaType.TEXT_PLAIN_VALUE);
-        // body Hello Spring
-        assertThat(res.getBody()).isEqualTo("Hello Spring");
+        assertThat(res.getBody()).isEqualTo("*Hello Spring*");
+    }
 
+    @Test
+    void failsHelloApi() {
+        TestRestTemplate rest = new TestRestTemplate();
+
+        ResponseEntity<String> res =
+                rest.getForEntity("http://localhost:8080/hello?name=", String.class);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
