@@ -1,4 +1,4 @@
-package tobyspring.helloboot;
+package tobyspring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,16 +8,10 @@ import java.util.Objects;
 
 @RestController
 public class HelloController {
-    private final HelloService helloService;
-
-    public HelloController(HelloService helloService) {
-        this.helloService = helloService;
-    }
 
     @GetMapping("/hello")
     public String hello(String name) {
-        if (name == null || name.trim().length() == 0) throw new IllegalArgumentException();
 
-        return helloService.sayHello(name);
+        return "hello" + name;
     }
 }
